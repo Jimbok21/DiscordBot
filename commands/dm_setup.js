@@ -1,5 +1,5 @@
 module.exports = {
-	name: 'dm setup',
+	name: 'dm_setup',
 	description: 'The bot DMs the user for the first time',
 	execute(message, args) {
         //sends the user a dm and puts a log in the console
