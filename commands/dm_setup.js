@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'dm_setup',
-	description: 'The bot DMs the user for the first time',
+	description: 'Used in the server if the user has deleted the DM with the bot and '
+    + 'wants to start a new one',
 	execute(message, args) {
         //sends the user a dm and puts a log in the console
         if(message.channel.type == 'DM') {
