@@ -1,5 +1,3 @@
-const dm_setup = require("../commands/dm_setup");
-
 module.exports = {
     name: 'guildMemberAdd',
     execute(member, client) {

@@ -9,7 +9,7 @@ module.exports = {
             autoIndex: false,
         };
 
-        mongoose.connect(`mongodb+srv://jimbok21:${process.env.PASS}@cluster0.warvu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, dbOptions);
+        mongoose.connect(process.env.MONGODB_URI, dbOptions);
         mongoose.Promise = global.Promise;
 
         mongoose.connection.on('connected', () => {
