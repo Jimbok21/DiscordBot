@@ -8,8 +8,9 @@ module.exports = {
 
         //takes the users input and reads it
         //gets the arguments as the message, then reads the command name and removes it from the arguements
-        const args = message.content.slice(client.prefix.length).trim().split(' ');
+        const args = message.content.slice(client.prefix.length).trim().split(', ');
         const commandName = args.shift().toLowerCase();
+        console.log(args);
 
         //checks if a command exists
         if (!client.commands.has(commandName)) return;
