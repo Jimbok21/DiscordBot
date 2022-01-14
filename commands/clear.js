@@ -1,7 +1,8 @@
 
 module.exports = {
 	name: 'clear',
-	description: 'Clears the messages of the server',
+	description: 'Clears the number of messages that you input',
+    inputs: '<1-100>',
 	async execute(message, args, client) {
         if(!args[0]) return message.reply("please enter the number of messages you want deleted");
         if(isNaN(args[0])) return message.reply("please enter a valid number below 100");
@@ -16,7 +17,8 @@ module.exports = {
             message.channel.bulkDelete(messages, true);
         })
         } catch (error) {
-            message.channel.send("You can only delete messages that are under 14 days old");
+            message.channel.send("You can only delete messages that are under 14 days old or in DMs");
+            console.log(error);
         };
 
         
