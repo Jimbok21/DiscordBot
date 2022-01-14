@@ -2,7 +2,7 @@ module.exports = {
 	name: 'dm_setup',
 	description: 'Used in the server if the user has deleted the DM with the bot and '
     + 'wants to start a new one',
-	execute(message, args) {
+	execute(message, args, client) {
         //sends the user a dm and puts a log in the console
         if(message.channel.type == 'DM') {
 		message.author.send('You are already direct messaging me');

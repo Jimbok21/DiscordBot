@@ -2,7 +2,7 @@
 module.exports = {
 	name: 'clear',
 	description: 'Clears the messages of the server',
-	async execute(message, args) {
+	async execute(message, args, client) {
         if(!args[0]) return message.reply("please enter the number of messages you want deleted");
         if(isNaN(args[0])) return message.reply("please enter a valid number below 100");
 

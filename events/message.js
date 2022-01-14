@@ -10,6 +10,8 @@ module.exports = {
         //gets the arguments as the message, then reads the command name and removes it from the arguements
         const args = message.content.slice(client.prefix.length).trim().split(', ');
         const commandName = args.shift().toLowerCase();
+        console.log("the args are: ");
+        console.log(args);
 
         //checks if a command exists
         if (!client.commands.has(commandName)) return;
@@ -18,7 +20,7 @@ module.exports = {
         const command = client.commands.get(commandName);
         //executes the command based on the clients input
         try {
-            command.execute(message, args);
+            command.execute(message, args, client);
         } catch (err) {
             console.log(err);
         }
