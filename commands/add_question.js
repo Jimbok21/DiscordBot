@@ -6,7 +6,6 @@ module.exports = {
     inputs: `<Question>, <answer>, <difficulty>`,
 	async execute(message, args, client) {
 		const question = new QuestionsModel({
-            //find way to put spaces into args[0]
             questionTxt: args[0],
             questionAnswer: args[1],
             difficulty: args[2]

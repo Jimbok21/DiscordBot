@@ -17,10 +17,8 @@ module.exports = {
             message.channel.bulkDelete(messages, true);
         })
         } catch (error) {
-            message.channel.send("You can only delete messages that are under 14 days old or in DMs");
+            message.channel.send("You can only delete messages that are under 14 days old or NOT in DMs");
             console.log(error);
         };
-
-        
 	},
 };
