@@ -13,22 +13,52 @@ module.exports = {
         };
         let questions = []
         message.channel
-            .awaitMessages({filter, max: 5, time: 5000 })
+            .awaitMessages({filter, max: 1, time: 5000 })
             .then(async(collected) => {
                 const msg = collected.first()
                 const msgContent = msg.content
-                
+                if(msgContent === "random") {
                     try{
-                        profileData = await questionsModel.find({difficulty: msgContent})
-                        console.log(profileData)
+                        profileData = await questionsModel.find()
                     }catch (err) {
                         console.log(err)
                     }
-                  
+                } else {
+                    try{
+                        profileData = await questionsModel.find({difficulty: msgContent})
+                    }catch (err) {
+                        console.log(err)
+                    }
+                }
+                let counter;
+                shuffle(profileData)
+                console.log("lemon")
+
                 
-                message.channel.send(profileData[4].questionTxt)
-                message.channel.send(profileData[4].questionAnswer)
+                console.log(profileData[1].questionTxt)
+                message.channel.send(profileData[1].questionTxt)
+                message.channel.send(profileData[1].questionAnswer)
+                
             })
             .catch((err) => console.log("ERROR " + err))
-	},
+	
+            //will put the questions in the array into a random order
+            function shuffle(array) {
+                let currentIndex = array.length,  randomIndex;
+              
+                // While there remain elements to shuffle...
+                while (currentIndex != 0) {
+              
+                  // Pick a remaining element...
+                  randomIndex = Math.floor(Math.random() * currentIndex);
+                  currentIndex--;
+              
+                  // And swap it with the current element.
+                  [array[currentIndex], array[randomIndex]] = [
+                    array[randomIndex], array[currentIndex]];
+                }
+              
+                return array;
+              }
+        },
 };
