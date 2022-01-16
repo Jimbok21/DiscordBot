@@ -2,7 +2,7 @@ const questionsModel = require('../../Discord_bot_code/models/questionsSchema')
 const DiscordJS = require('discord.js')
 module.exports = {
 	name: 'start',
-	description: 'will ask the user a set of 5 random questions',
+	description: 'will ask the user a set of 5 random questions based on the difficulty they input',
 	async execute(message, args, client) {
 
         message.channel.send("What difficulty would you like? \n please type: easy, medium, hard or random")
@@ -11,7 +11,6 @@ module.exports = {
             return m.author.id === message.author.id
             
         };
-        let questions = []
         message.channel
             .awaitMessages({filter, max: 1, time: 5000 })
             .then(async(collected) => {
@@ -30,19 +29,33 @@ module.exports = {
                         console.log(err)
                     }
                 }
-                let counter;
                 shuffle(profileData)
-                console.log("lemon")
 
                 
                 console.log(profileData[1].questionTxt)
-                message.channel.send(profileData[1].questionTxt)
-                message.channel.send(profileData[1].questionAnswer)
+                for(let i = 0; i < 3; i++) {
+                    message.channel.send(`What is the English for ${profileData[i].questionAnswer}?`)
+                    message.channel
+                    .awaitMessages({filter, max: 1, time: 5000 })
+                    .then(async(collected) => {
+                        const message = await collected.first()
+                        const messageContent = message.content
+                        if(profileData[i].questionTxt === messageContent) {
+                            message.channel.send("correct")
+                        } else {
+                            message.channel.send("incorrect")
+                        }
+                    })
+                }
+                //message.channel.send(`What is the Chinese for ${profileData[0].questionTxt}?`)
+
+                //message.channel.send(`The Chinese for ${profileData[0].questionTxt} is ${profileData[0].questionAnswer}`)
                 
             })
             .catch((err) => console.log("ERROR " + err))
 	
             //will put the questions in the array into a random order
+            //uses a Fisher-Yates (aka Knuth) Shuffle
             function shuffle(array) {
                 let currentIndex = array.length,  randomIndex;
               
