@@ -15,10 +15,10 @@ module.exports = {
             .awaitMessages({filter, max: 5, time: 5000 })
             .then(async(collected) => {
                 const msg = collected.first()
-                const messg = msg.content
+                const msgContent = msg.content
                 console.log("lemon")
                 try{
-                profileData = await questionsModel.findOne({questionAnswer: messg})
+                    profileData = await questionsModel.findOne({questionAnswer: msgContent})
                 }catch (err) {
                     console.log(err)
                 }
@@ -26,15 +26,6 @@ module.exports = {
                 message.channel.send(profileData.questionTxt)
                 message.channel.send(profileData.questionAnswer)
             })
-            .catch((err) => console.log("ERROR " + err + msg))
-
-            try {
-                //profileData = await questionsModel.findOne({questionAnswer: "hi"})
-             } catch(err) {
-                 console.log(err)
-             }
-             //message.channel.send(profileData.questionTxt)
-             //message.channel.send(profileData.questionAnswer)
-            
+            .catch((err) => console.log("ERROR " + err))
 	},
 };
