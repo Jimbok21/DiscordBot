@@ -2,7 +2,9 @@ const questionsModel = require('../../Discord_bot_code/models/questionsSchema')
 const DiscordJS = require('discord.js')
 module.exports = {
     name: 'start',
-    description: 'will ask the user a set of 5 random questions based on the difficulty they input',
+    description: `The user must answer as many questions as possible in the time they provide. They can choose the difficulty of the questions.` 
+    + ` If no time is specified, 30s is the default`,
+    inputs: `<time in seconds>`,
     async execute(message, args, client) {
 
         //initialize variables and send intro messages
@@ -10,12 +12,18 @@ module.exports = {
         let selected = false
         let counter = 0
         let score = 0
+        let time
+        if(args[0] == null) {
+            time = 30
+        } else {
+            time = args[0]
+        }
         message.channel.send("you have 30 seconds to answer as many questions as you can")
         message.channel.send("What difficulty would you like? \nplease type: easy, medium, hard or random")
 
         //sets the message collector to 30 seconds
         const collector = new DiscordJS.MessageCollector(message.channel, {
-            time: 30000,
+            time: time * 1000,
         })
 
         collector.on("collect", async (messg) => {
