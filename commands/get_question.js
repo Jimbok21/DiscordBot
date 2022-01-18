@@ -1,5 +1,6 @@
 const questionsModel = require('../../Discord_bot_code/models/questionsSchema')
 const DiscordJS = require('discord.js')
+
 module.exports = {
     name: 'get_question',
     description: 'Gets the specific question and answer from the database',

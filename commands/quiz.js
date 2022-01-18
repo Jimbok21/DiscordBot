@@ -41,8 +41,10 @@ module.exports = {
                     } catch (err) {
                         console.log(err)
                     }
-                } else if (messg.content === "easy" || "medium" || "hard") {
+                } else if (messg.content == "easy" || messg.content == "medium" || messg.content == "hard") {
                     try {
+                        console.log("LEMONS")
+                        console.log(messg.content)
                         //The difficulty specified questions are put into an array and shuffled
                         profileData = await questionsModel.find({ difficulty: messg.content })
                         shuffle(profileData)
@@ -52,10 +54,17 @@ module.exports = {
                     } catch (err) {
                         console.log(err)
                     }
+                } else {
+                    //if the input is invalid, it will give the user hard questions
+                    message.channel.send(`That is not a valid difficulty. Getting you hard questions 😄`)
+                    profileData = await questionsModel.find({ difficulty: "hard" })
+                    shuffle(profileData)
+                    selected = true
+                    //sends the question
+                    message.channel.send(`What is: ${profileData[counter].questionAnswer}`)
+                    return
                 }
-            }
-
-            if (selected === true) {
+            } else if (selected === true) {
                 let answers = []
                 answers[counter] = messg.content
 
@@ -118,4 +127,4 @@ module.exports = {
             return array;
         }
     },
-};
+}
