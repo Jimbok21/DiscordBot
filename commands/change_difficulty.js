@@ -23,9 +23,9 @@ module.exports = {
             if (gotQuestion == false) {
                 //the first input will get the question
                 try {
-                    profileData = await questionsModel.findOne({ questionTxt: messg.content })
+                    profileData = await questionsModel.findOne({ questionEnglish: messg.content })
                     gotQuestion = true
-                    message.channel.send(`The question is ${profileData.questionTxt} = ${profileData.questionAnswer}`)
+                    message.channel.send(`The question is ${profileData.questionEnglish} = ${profileData.questionChinese}`)
                     message.channel.send(`What is the new difficulty of this question? Please type easy, medium or hard`)
                     return
                 } catch (err) {
@@ -40,13 +40,13 @@ module.exports = {
                 if (newDifficulty == "easy" || "medium" || "hard") {
                     const update = await questionsModel.updateOne(
                         {
-                            questionTxt: profileData.questionTxt
+                            questionEnglish: profileData.questionEnglish
                         },
                         {
                             difficulty: newDifficulty
                         }
                     )
-                    message.channel.send(`updated: ${profileData.questionTxt} = ${profileData.questionAnswer} to difficulty: ${newDifficulty}`)
+                    message.channel.send(`updated: ${profileData.questionEnglish} = ${profileData.questionChinese} to difficulty: ${newDifficulty}`)
                 } else {
                     message.channel.send(`${messg.content} is not valid. Please restart and choose easy, medium or hard`)
                 }

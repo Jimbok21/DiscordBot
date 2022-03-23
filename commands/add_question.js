@@ -12,10 +12,14 @@ module.exports = {
             message.channel.send("please refer to .help on how to format this command")
             return
         }
+
+        if (args[3] != "easy" || "medium" || "hard") {
+            message.channel.send("Please use a valid difficulty of either easy, medium or hard")
+        }
         
         const question = new questionsModel({
-            questionTxt: args[0],
-            questionAnswer: args[1],
+            questionEnglish: args[0],
+            questionChinese: args[1],
             difficulty: args[2]
         });
         const savedQuestion = await question.save();

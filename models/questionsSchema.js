@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 
-//question Txt is the English
-//question Answer is the Chinese
+//question Txt is now the Chinese
+//question Answer is now the English
+//question can have multiple english answers e.g. five, 5
 const questionsSchema = new mongoose.Schema({
-    questionTxt: mongoose.SchemaTypes.String,
-    questionAnswer: mongoose.SchemaTypes.String,
+    questionChinese: mongoose.SchemaTypes.String,
+    questionEnglish: mongoose.SchemaTypes.String,
     difficulty: mongoose.SchemaTypes.String
 });
 

@@ -36,7 +36,7 @@ module.exports = {
                         profileData = await questionsModel.find()
                         shuffle(profileData)
                         selected = true
-                        message.channel.send(`What is: ${profileData[counter].questionAnswer} `)
+                        message.channel.send(`What is: ${profileData[counter].questionChinese} `)
                         return
                     } catch (err) {
                         console.log(err)
@@ -49,7 +49,7 @@ module.exports = {
                         profileData = await questionsModel.find({ difficulty: messg.content })
                         shuffle(profileData)
                         selected = true
-                        message.channel.send(`What is: ${profileData[counter].questionAnswer}`)
+                        message.channel.send(`What is: ${profileData[counter].questionChinese}`)
                         return
                     } catch (err) {
                         console.log(err)
@@ -61,7 +61,7 @@ module.exports = {
                     shuffle(profileData)
                     selected = true
                     //sends the question
-                    message.channel.send(`What is: ${profileData[counter].questionAnswer}`)
+                    message.channel.send(`What is: ${profileData[counter].questionChinese}`)
                     return
                 }
             } else if (selected === true) {
@@ -75,18 +75,18 @@ module.exports = {
                 }
 
                 //checks if the answer is correct and adds it to the score
-                if (profileData[counter].questionTxt === answers[counter]) {
+                if (profileData[counter].questionEnglish === answers[counter]) {
                     score++
                     message.channel.send(`Correct, your score is currently: **${score}/5**`)
                 } else {
-                    message.channel.send(`Incorrect, the answer was ${profileData[counter].questionTxt} \nyour score is currently: ${score}/5`)
+                    message.channel.send(`Incorrect, the answer was ${profileData[counter].questionEnglish} \nyour score is currently: ${score}/5`)
                 }
 
                 //sends the next question
                 try {
                     //will only send 5 questions
                     if (counter < 4) {
-                        message.channel.send(`What is ${profileData[counter + 1].questionAnswer}`)
+                        message.channel.send(`What is ${profileData[counter + 1].questionChinese}`)
                     }
                 } catch (err) {
                     message.channel.send(`All out of questions`)

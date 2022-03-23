@@ -20,13 +20,13 @@ module.exports = {
                 const msg = collected.first()
                 const msgContent = msg.content
                 try {
-                    profileData = await questionsModel.findOne({ questionTxt: msgContent })
+                    profileData = await questionsModel.findOne({ questionEnglish: msgContent })
                 } catch (err) {
                     console.log(err)
                 }
                 //prints the question and answer
                 console.log(msg.content)
-                message.channel.send(`the English is: ${profileData.questionTxt} \nThe Chinese is ${profileData.questionAnswer}`)
+                message.channel.send(`the English is: ${profileData.questionEnglish} \nThe Chinese is ${profileData.questionChinese}`)
             })
             .catch((err) => {
                 //catches any errors like a timeout or if the question is not in the database

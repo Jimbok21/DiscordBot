@@ -27,7 +27,7 @@ module.exports = {
                         shuffle(profileData)
                         selected = true
                         //sends the question
-                        message.channel.send(`What is: ${profileData[0].questionAnswer} `)
+                        message.channel.send(`What is: ${profileData[0].questionChinese} `)
                         return
                     } catch (err) {
                         console.log(err)
@@ -39,7 +39,7 @@ module.exports = {
                         shuffle(profileData)
                         selected = true
                         //sends the question
-                        message.channel.send(`What is: ${profileData[0].questionAnswer}`)
+                        message.channel.send(`What is: ${profileData[0].questionChinese}`)
                         return
                     } catch (err) {
                         console.log(err)
@@ -51,7 +51,7 @@ module.exports = {
                     shuffle(profileData)
                     selected = true
                     //sends the question
-                    message.channel.send(`What is: ${profileData[0].questionAnswer}`)
+                    message.channel.send(`What is: ${profileData[0].questionChinese}`)
                     return
                 }
             } else if (selected === true) {
@@ -63,10 +63,10 @@ module.exports = {
                 }
 
                 //checks if the answer is correct 
-                if (profileData[0].questionTxt === messg.content) {
+                if (profileData[0].questionEnglish === messg.content) {
                     message.channel.send(`Correct!`)
                 } else {
-                    message.channel.send(`Incorrect, the answer was ${profileData[0].questionTxt}`)
+                    message.channel.send(`Incorrect, the answer was ${profileData[0].questionEnglish}`)
                 }
             }
         })

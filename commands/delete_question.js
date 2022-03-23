@@ -20,13 +20,13 @@ module.exports = {
                 const msg = collected.first()
                 const msgContent = msg.content
                 try {
-                    profileData = await questionsModel.findOneAndDelete({ questionTxt: msgContent })
+                    profileData = await questionsModel.findOneAndDelete({ questionEnglish: msgContent })
                 } catch (err) {
                     console.log(err)
                 }
                 //prints the delete confirmation
                 console.log(msg.content)
-                message.channel.send(`the question ${profileData.questionTxt} = ${profileData.questionAnswer} has been deleted`)
+                message.channel.send(`the question ${profileData.questionEnglish} = ${profileData.questionChinese} has been deleted`)
             })
             .catch((err) => {
                 //catches any errors like a timeout or if the question is not in the database

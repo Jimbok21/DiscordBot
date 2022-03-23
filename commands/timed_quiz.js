@@ -42,7 +42,7 @@ module.exports = {
                         profileData = await questionsModel.find()
                         shuffle(profileData)
                         selected = true
-                        message.channel.send(`What is ${profileData[counter].questionAnswer}`)
+                        message.channel.send(`What is ${profileData[counter].questionChinese}`)
                         return
                     } catch (err) {
                         console.log(err)
@@ -53,7 +53,7 @@ module.exports = {
                         profileData = await questionsModel.find({ difficulty: messg.content })
                         shuffle(profileData)
                         selected = true
-                        message.channel.send(`What is ${profileData[counter].questionAnswer}`)
+                        message.channel.send(`What is ${profileData[counter].questionChinese}`)
                         return
                     } catch (err) {
                         console.log(err)
@@ -72,16 +72,16 @@ module.exports = {
                 }
 
                 //checks if the answer is correct and adds it to the score
-                if(profileData[counter].questionTxt === answers[counter]) {
+                if(profileData[counter].questionEnglish === answers[counter]) {
                     score++
                     message.channel.send(`Correct, your score is currently: **${score}**`)
                 } else {
-                    message.channel.send(`Incorrect, the answer was ${profileData[counter].questionTxt} \nyour score is currently: ${score}`)
+                    message.channel.send(`Incorrect, the answer was ${profileData[counter].questionEnglish} \nyour score is currently: ${score}`)
                 }
 
                 //sends the next question
                 try{
-                message.channel.send(`What is ${profileData[counter + 1].questionAnswer}`)
+                message.channel.send(`What is ${profileData[counter + 1].questionChinese}`)
                 } catch(err) {
                     message.channel.send(`All out of questions`)
                 }
