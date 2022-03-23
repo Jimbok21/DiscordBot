@@ -1,5 +1,3 @@
-
-
 module.exports = {
 	name: 'ping',
 	description: 'Responds to the user with "Pong"',

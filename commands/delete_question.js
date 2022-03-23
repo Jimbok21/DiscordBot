@@ -2,12 +2,12 @@ const questionsModel = require('../../Discord_bot_code/models/questionsSchema')
 const DiscordJS = require('discord.js')
 
 module.exports = {
-    name: 'get_question',
-    description: 'Gets the specific question and answer from the database',
+    name: 'delete_question',
+    description: 'deletes the specific question and answer from the database',
     async execute(message, args, client) {
 
-        message.channel.send("Please type the English of the question you want to find")
-        
+        message.channel.send("Please type the English of the question you want to delete")
+
         //checks that the messages from the author
         const filter = (m) => {
             return m.author.id === message.author.id
@@ -16,17 +16,17 @@ module.exports = {
         message.channel
             .awaitMessages({ filter, max: 1 })
             .then(async (collected) => {
-                //collects the message and finds it in the database
+                //collects the message, finds and deletes it in the database
                 const msg = collected.first()
                 const msgContent = msg.content
                 try {
-                    profileData = await questionsModel.findOne({ questionTxt: msgContent })
+                    profileData = await questionsModel.findOneAndDelete({ questionTxt: msgContent })
                 } catch (err) {
                     console.log(err)
                 }
-                //prints the question and answer
+                //prints the delete confirmation
                 console.log(msg.content)
-                message.channel.send(`the English is: ${profileData.questionTxt} \nThe Chinese is ${profileData.questionAnswer}`)
+                message.channel.send(`the question ${profileData.questionTxt} = ${profileData.questionAnswer} has been deleted`)
             })
             .catch((err) => {
                 //catches any errors like a timeout or if the question is not in the database

@@ -17,6 +17,7 @@ module.exports = {
             filter,
             max: 2,
         })
+        
 
         collector.on("collect", async (messg) => {
             if (gotQuestion == false) {
@@ -45,7 +46,6 @@ module.exports = {
                             difficulty: newDifficulty
                         }
                     )
-                    //const updatedQuestion = await update.save();
                     message.channel.send(`updated: ${profileData.questionTxt} = ${profileData.questionAnswer} to difficulty: ${newDifficulty}`)
                 } else {
                     message.channel.send(`${messg.content} is not valid. Please restart and choose easy, medium or hard`)
