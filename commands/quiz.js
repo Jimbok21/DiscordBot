@@ -30,7 +30,8 @@ module.exports = {
         collector.on("collect", async (messg) => {
             //if its the first run then checks the selected difficulty
             if (selected === false) {
-                if (messg.content === "random") {
+                difficultySelected = messg.content.toLowerCase()
+                if (difficultySelected == "random") {
                     //if its random, all of the questions are put into an array and shuffled
                     try {
                         profileData = await questionsModel.find()
@@ -40,19 +41,19 @@ module.exports = {
                         return
                     } catch (err) {
                         console.log(err)
+                        collector.stop('not enough questions')
                     }
-                } else if (messg.content == "easy" || messg.content == "medium" || messg.content == "hard") {
+                } else if (difficultySelected == "easy" || difficultySelected == "medium" || difficultySelected == "hard") {
                     try {
-                        console.log("LEMONS")
-                        console.log(messg.content)
                         //The difficulty specified questions are put into an array and shuffled
-                        profileData = await questionsModel.find({ difficulty: messg.content })
+                        profileData = await questionsModel.find({ difficulty: difficultySelected })
                         shuffle(profileData)
                         selected = true
                         message.channel.send(`What is: ${profileData[counter].questionChinese}`)
                         return
                     } catch (err) {
                         console.log(err)
+                        collector.stop('not enough questions')
                     }
                 } else {
                     //if the input is invalid, it will give the user hard questions
@@ -61,21 +62,21 @@ module.exports = {
                     shuffle(profileData)
                     selected = true
                     //sends the question
+                    try {
                     message.channel.send(`What is: ${profileData[counter].questionChinese}`)
+                    } catch (err) {
+                        console.log(err)
+                        collector.stop('not enough questions')
+                    }
                     return
                 }
             } else if (selected === true) {
                 let answers = []
-                answers[counter] = messg.content
+                answers[counter] = messg.content.toLowerCase()
 
-                //if the user still tries to answer after doing all the questions, this error appears
-                if (profileData[counter] == null) {
-                    message.channel.send(`All out of questions, please wait for the timer to elapse`)
-                    return
-                }
 
                 //checks if the answer is correct and adds it to the score
-                if (profileData[counter].questionEnglish === answers[counter]) {
+                if (profileData[counter].questionEnglish.includes(answers[counter])) {
                     score++
                     message.channel.send(`Correct, your score is currently: **${score}/5**`)
                 } else {
@@ -89,7 +90,9 @@ module.exports = {
                         message.channel.send(`What is ${profileData[counter + 1].questionChinese}`)
                     }
                 } catch (err) {
+                    //if it cannot send the question, it is because there are not enough questions in the database
                     message.channel.send(`All out of questions`)
+                    collector.stop('out of questions')
                 }
 
                 //increments the counter
@@ -100,11 +103,14 @@ module.exports = {
 
         //sends well done when the game ends and shows the score
         collector.on("end", (msg) => {
-            try {
+            if (selected == true) {
+                if (profileData[counter] == null) {
+                    message.channel.send('There are no questions of that difficulty in the database')
+                } else {
                 message.channel.send(`**Well done! Your final score was ${score}/5**`)
-            } catch (err) {
-                //used if the user doesnt select a difficulty in the time given
-                message.channel.send(`Please restart the command and select a difficulty`)
+                }
+            } else {
+                message.channel.send(`Timeout error. \nPlease restart the command and select a difficulty`)
             }
         })
 
