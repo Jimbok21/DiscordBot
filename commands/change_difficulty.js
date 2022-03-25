@@ -30,7 +30,7 @@ module.exports = {
                     return
                 } catch (err) {
                     message.channel.send(`That question does not exist. Please type the command again`)
-                    gotQuestion = false
+                    collector.stop('question not found')
                     console.log(err)
                     return
                 }
