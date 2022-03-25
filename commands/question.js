@@ -56,20 +56,23 @@ module.exports = {
                 }
             } else if (selected === true) {
 
-                //if there are no questions in the database
-                if (profileData[0] == null) {
-                    message.channel.send(`ERROR, there are no questions `)
-                    return
-                }
-
                 //checks if the answer is correct 
                 let answers = profileData[0].questionEnglish
                 
                 if (answers.includes(messg.content.toLowerCase())) {
                     message.channel.send(`Correct!`)
                 } else {
-                    console.log(`input = ${messg.content}\nanswer = ${answers[0]}`)
-                    message.channel.send(`Incorrect, the answer was ${profileData[0].questionEnglish}`)
+                    let answerString = ""
+                    //puts the multile answers into one string
+                    for (let index = 0; index < answers.length; index++) {
+                        answerString = answerString + answers[index]
+                        //if the answer is not the last one, add an or between them
+                        if (index != answers.length - 1) {
+                            answerString = answerString + ` or `
+                        }
+                    }
+                    message.channel.send(`Incorrect, the answer was ||${answerString}||`)
+                    
                 }
             }
         })

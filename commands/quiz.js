@@ -71,12 +71,12 @@ module.exports = {
                     return
                 }
             } else if (selected === true) {
-                let answers = []
-                answers[counter] = messg.content.toLowerCase()
+                let messageContent = [] 
+                messageContent[counter] = messg.content.toLowerCase()
 
 
                 //checks if the answer is correct and adds it to the score
-                if (profileData[counter].questionEnglish.includes(answers[counter])) {
+                if (profileData[counter].questionEnglish.includes(messageContent[counter])) {
                     score++
                     message.channel.send(`Correct, your score is currently: **${score}/5**`)
                 } else {
