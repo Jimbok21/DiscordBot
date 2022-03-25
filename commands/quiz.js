@@ -118,6 +118,7 @@ module.exports = {
                     message.channel.send(`**Well done! Your final score was ${score}/5**`)
                 }
             } else {
+                //no difficulty was selected
                 message.channel.send(`Timeout error. \nPlease restart the command and select a difficulty`)
             }
         })

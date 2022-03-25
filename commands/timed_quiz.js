@@ -36,7 +36,8 @@ module.exports = {
             if (messg.author.id != message.author.id) return;
             //if its the first run then checks the selected difficulty
             if (selected === false) {
-                if (messg.content === "random") {
+                difficultySelected = messg.content.toLowerCase()
+                if (difficultySelected == "random") {
                     //if its random, all of the questions are put into an array and shuffled
                     try {
                         profileData = await questionsModel.find()
@@ -46,37 +47,56 @@ module.exports = {
                         return
                     } catch (err) {
                         console.log(err)
+                        collector.stop('not enough questions')
                     }
-                } else if (messg.content === "easy" || messg.content === "medium" || messg.content === "hard") {
+                } else if (difficultySelected == "easy" || difficultySelected == "medium" || difficultySelected == "hard") {
                     try {
                         //The difficulty specified questions are put into an array and shuffled
-                        profileData = await questionsModel.find({ difficulty: messg.content })
+                        profileData = await questionsModel.find({ difficulty: difficultySelected })
                         shuffle(profileData)
                         selected = true
                         message.channel.send(`What is ${profileData[counter].questionChinese}`)
                         return
                     } catch (err) {
                         console.log(err)
+                        collector.stop('not enough questions')
                     }
+                } else {
+                    //if the input is invalid, it will give the user hard questions
+                    message.channel.send(`That is not a valid difficulty. Getting you hard questions 😄`)
+                    profileData = await questionsModel.find({ difficulty: "hard" })
+                    shuffle(profileData)
+                    selected = true
+                    //sends the question
+                    try {
+                        message.channel.send(`What is: ${profileData[counter].questionChinese}`)
+                    } catch (err) {
+                        console.log(err)
+                        collector.stop('not enough questions')
+                    }
+                    return
                 }
             }
 
             if (selected === true) {
                 let answers = []
-                answers[counter] = messg.content
-                
-                //if the user still tries to answer after doing all the questions, this error appears
-                if(profileData[counter] == null) {
-                    message.channel.send(`All out of questions, please wait for the timer to elapse`)
-                    return
-                }
+                answers[counter] = messg.content.toLowerCase()
 
                 //checks if the answer is correct and adds it to the score
-                if(profileData[counter].questionEnglish === answers[counter]) {
+                if(profileData[counter].questionEnglish.includes(answers[counter])) {
                     score++
                     message.channel.send(`Correct, your score is currently: **${score}**`)
                 } else {
-                    message.channel.send(`Incorrect, the answer was ${profileData[counter].questionEnglish} \nyour score is currently: ${score}`)
+                    let answerString = ""
+                    //puts the multiple answers into one string
+                    for (let index = 0; index < profileData[counter].questionEnglish.length; index++) {
+                        answerString = answerString + profileData[counter].questionEnglish[index]
+                        //if the answer is not the last one, add an or between them
+                        if (index != profileData[counter].questionEnglish.length - 1) {
+                            answerString = answerString + ` or `
+                        }
+                    }
+                    message.channel.send(`Incorrect, the answer was ||${answerString}|| \nyour score is currently: ${score}`)
                 }
 
                 //sends the next question
@@ -84,6 +104,7 @@ module.exports = {
                 message.channel.send(`What is ${profileData[counter + 1].questionChinese}`)
                 } catch(err) {
                     message.channel.send(`All out of questions`)
+                    collector.stop('out of questions')
                 }
                 //increments the counter
                 counter++
@@ -93,11 +114,15 @@ module.exports = {
 
         //sends well done when the game ends and shows the score
         collector.on("end", (msg) => {
-            try {
-                message.channel.send(`**Well done! Your final score was ${score}**`)
-            } catch (err) {
-                //used if the user doesnt select a difficulty in the time given
-                message.channel.send(`Please restart the command and select a difficulty`)
+            if (selected == true) {
+                if (profileData[counter] == null) {
+                    message.channel.send('There are no questions of that difficulty in the database')
+                } else {
+                    message.channel.send(`**Well done! Your final score was ${score}**`)
+                }
+            } else {
+                //no difficulty was selected
+                message.channel.send(`Timeout error. \nPlease restart the command and select a difficulty`)
             }
         })
 
