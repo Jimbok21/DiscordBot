@@ -30,7 +30,8 @@ module.exports = {
                         message.channel.send(`What is: ${profileData[0].questionChinese} `)
                         return
                     } catch (err) {
-                        console.log(err)
+                        message.channel.send(`The database is empty`)
+                        collector.stop('empty database')
                     }
                 } else if (messageLowerCase == "easy" || messageLowerCase == "medium" || messageLowerCase == "hard") {
                     try {
@@ -42,7 +43,9 @@ module.exports = {
                         message.channel.send(`What is: ${profileData[0].questionChinese}`)
                         return
                     } catch (err) {
-                        console.log(err)
+                        message.channel.send(`There are not enough questions of that difficulty`)
+                        collector.stop('out of questions')
+    
                     }
                 } else {
                     //if the user doesnt enter a valid difficulty, it gives them a hard question
@@ -51,7 +54,12 @@ module.exports = {
                     shuffle(profileData)
                     selected = true
                     //sends the question
+                    try {
                     message.channel.send(`What is: ${profileData[0].questionChinese}`)
+                    } catch (err) {
+                        message.channel.send(`There are not enough questions of that difficulty`)
+                        collector.stop('out of questions')
+                    }
                     return
                 }
             } else if (selected === true) {
