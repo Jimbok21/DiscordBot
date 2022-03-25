@@ -15,17 +15,16 @@ module.exports = {
 
         message.channel
             .awaitMessages({ filter, max: 1 })
-            .then(async (collected) => {
+            .then(async (messg) => {
                 //collects the message, finds and deletes it in the database
-                const msg = collected.first()
-                const msgContent = msg.content
+                let msg = messg.first()
+                let msgContent = msg.content.toString().toLowerCase()
                 try {
                     profileData = await questionsModel.findOneAndDelete({ questionEnglish: msgContent })
                 } catch (err) {
                     console.log(err)
                 }
                 //prints the delete confirmation
-                console.log(msg.content)
                 message.channel.send(`the question ${profileData.questionEnglish} = ${profileData.questionChinese} has been deleted`)
             })
             .catch((err) => {
