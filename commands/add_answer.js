@@ -1,9 +1,10 @@
-const questionsModel = require('../../Discord_bot_code/models/questionsSchema')
+const questionsModel = require('../models/questionsSchema')
 const DiscordJS = require('discord.js')
 
 module.exports = {
-    name: 'change_difficulty',
-    description: 'Changes the difficulty of a question',
+    name: 'add_answer',
+    description: 'adds another english answer to a question e.g. 五 = 5 = five',
+
     async execute(message, args, client) {
 
         message.channel.send("Please type the English of the question you want to update")
@@ -17,7 +18,7 @@ module.exports = {
             filter,
             max: 2,
         })
-        
+
 
         collector.on("collect", async (messg) => {
             if (gotQuestion == false) {
@@ -26,7 +27,7 @@ module.exports = {
                     profileData = await questionsModel.findOne({ questionEnglish: messg.content })
                     gotQuestion = true
                     message.channel.send(`The question is ${profileData.questionEnglish} = ${profileData.questionChinese}`)
-                    message.channel.send(`What is the new difficulty of this question? Please type easy, medium or hard`)
+                    message.channel.send(`What is an alternative english answer of that question`)
                     return
                 } catch (err) {
                     message.channel.send(`That question does not exist. Please type the command again`)
@@ -35,22 +36,17 @@ module.exports = {
                     return
                 }
             } else if (gotQuestion == true) {
-                let newDifficulty = messg.content.toLowerCase()
-                console.log(newDifficulty)
-                if (newDifficulty == "easy" || newDifficulty == "medium" || newDifficulty == "hard") {
-                    const update = await questionsModel.updateOne(
-                        {
-                            questionEnglish: profileData.questionEnglish
-                        },
-                        {
-                            difficulty: newDifficulty
-                        }
-                    )
-                    message.channel.send(`updated: ${profileData.questionEnglish} = ${profileData.questionChinese} to difficulty: ${newDifficulty}`)
-                } else {
-                    message.channel.send(`${messg.content} is not valid. Please restart and choose easy, medium or hard`)
-                }
+                let additionalAnswer = messg.content.toLowerCase()
+                const update = await questionsModel.updateOne(
+                    {
+                        questionEnglish: profileData.questionEnglish
+                    }
+                )
+                message.channel.send(`updated: ${profileData.questionEnglish} = ${profileData.questionChinese} to difficulty: ${newDifficulty}`)
+            } else {
+                message.channel.send(`${messg.content} is not valid. Please restart and choose easy, medium or hard`)
             }
         })
-    },
-};
+    }
+}
+        

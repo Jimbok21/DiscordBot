@@ -47,7 +47,7 @@ module.exports = {
                     } catch (err) {
                         console.log(err)
                     }
-                } else if (messg.content === "easy" || "medium" || "hard") {
+                } else if (messg.content === "easy" || messg.content === "medium" || messg.content === "hard") {
                     try {
                         //The difficulty specified questions are put into an array and shuffled
                         profileData = await questionsModel.find({ difficulty: messg.content })

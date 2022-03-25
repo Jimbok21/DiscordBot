@@ -63,9 +63,12 @@ module.exports = {
                 }
 
                 //checks if the answer is correct 
-                if (profileData[0].questionEnglish === messg.content) {
+                let answers = profileData[0].questionEnglish
+                
+                if (answers.includes(messg.content.toLowerCase())) {
                     message.channel.send(`Correct!`)
                 } else {
+                    console.log(`input = ${messg.content}\nanswer = ${answers[0]}`)
                     message.channel.send(`Incorrect, the answer was ${profileData[0].questionEnglish}`)
                 }
             }
