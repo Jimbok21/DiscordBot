@@ -63,7 +63,7 @@ module.exports = {
                     selected = true
                     //sends the question
                     try {
-                    message.channel.send(`What is: ${profileData[counter].questionChinese}`)
+                        message.channel.send(`What is: ${profileData[counter].questionChinese}`)
                     } catch (err) {
                         console.log(err)
                         collector.stop('not enough questions')
@@ -80,7 +80,16 @@ module.exports = {
                     score++
                     message.channel.send(`Correct, your score is currently: **${score}/5**`)
                 } else {
-                    message.channel.send(`Incorrect, the answer was ${profileData[counter].questionEnglish} \nyour score is currently: ${score}/5`)
+                    let answerString = ""
+                    //puts the multile answers into one string
+                    for (let index = 0; index < profileData[counter].questionEnglish.length; index++) {
+                        answerString = answerString + profileData[counter].questionEnglish[index]
+                        //if the answer is not the last one, add an or between them
+                        if (index != profileData[counter].questionEnglish.length - 1) {
+                            answerString = answerString + ` or `
+                        }
+                    }
+                    message.channel.send(`Incorrect, the answer was ||${answerString}|| \nyour score is currently: ${score}/5`)
                 }
 
                 //sends the next question
@@ -90,11 +99,10 @@ module.exports = {
                         message.channel.send(`What is ${profileData[counter + 1].questionChinese}`)
                     }
                 } catch (err) {
-                    //if it cannot send the question, it is because there are not enough questions in the database
+                    //if it cannot send the next question, it is because there are not enough questions in the database
                     message.channel.send(`All out of questions`)
                     collector.stop('out of questions')
                 }
-
                 //increments the counter
                 counter++
 
@@ -107,7 +115,7 @@ module.exports = {
                 if (profileData[counter] == null) {
                     message.channel.send('There are no questions of that difficulty in the database')
                 } else {
-                message.channel.send(`**Well done! Your final score was ${score}/5**`)
+                    message.channel.send(`**Well done! Your final score was ${score}/5**`)
                 }
             } else {
                 message.channel.send(`Timeout error. \nPlease restart the command and select a difficulty`)
