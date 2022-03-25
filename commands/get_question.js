@@ -32,7 +32,7 @@ module.exports = {
                         answerString = answerString + profileData.questionEnglish[index]
                         //if the answer is not the last one, add an or between them
                         if (index != profileData.questionEnglish.length - 1) {
-                            answerString = answerString + ` or `
+                            answerString = answerString + `**, **`
                         }
                     }
                 message.channel.send(`the English is: **${answerString}** \nThe Chinese is **${profileData.questionChinese}**`)

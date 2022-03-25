@@ -76,10 +76,10 @@ module.exports = {
                         answerString = answerString + answers[index]
                         //if the answer is not the last one, add an or between them
                         if (index != answers.length - 1) {
-                            answerString = answerString + ` or `
+                            answerString = answerString + `**, **`
                         }
                     }
-                    message.channel.send(`Incorrect, the answer was ||${answerString}||`)
+                    message.channel.send(`Incorrect, the answer was ||**${answerString}**||`)
                 }
             }
         })

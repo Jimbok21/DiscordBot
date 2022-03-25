@@ -86,10 +86,10 @@ module.exports = {
                         answerString = answerString + profileData[counter].questionEnglish[index]
                         //if the answer is not the last one, add an or between them
                         if (index != profileData[counter].questionEnglish.length - 1) {
-                            answerString = answerString + ` or `
+                            answerString = answerString + `**, **`
                         }
                     }
-                    message.channel.send(`Incorrect, the answer was ||${answerString}|| \nyour score is currently: ${score}/5`)
+                    message.channel.send(`Incorrect, the answer was ||**${answerString}**|| \nyour score is currently: ${score}/5`)
                 }
 
                 //sends the next question
