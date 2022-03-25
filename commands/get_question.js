@@ -26,7 +26,16 @@ module.exports = {
                 }
                 //prints the question and answer
                 console.log(msg.content)
-                message.channel.send(`the English is: ${profileData.questionEnglish} \nThe Chinese is ${profileData.questionChinese}`)
+                let answerString = ""
+                    //puts the multiple answers into one string
+                    for (let index = 0; index < profileData.questionEnglish.length; index++) {
+                        answerString = answerString + profileData.questionEnglish[index]
+                        //if the answer is not the last one, add an or between them
+                        if (index != profileData.questionEnglish.length - 1) {
+                            answerString = answerString + ` or `
+                        }
+                    }
+                message.channel.send(`the English is: ${answerString} \nThe Chinese is ${profileData.questionChinese}`)
             })
             .catch((err) => {
                 //catches any errors like a timeout or if the question is not in the database

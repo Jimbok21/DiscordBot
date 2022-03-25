@@ -71,7 +71,7 @@ module.exports = {
                     message.channel.send(`Correct!`)
                 } else {
                     let answerString = ""
-                    //puts the multile answers into one string
+                    //puts the multiple answers into one string
                     for (let index = 0; index < answers.length; index++) {
                         answerString = answerString + answers[index]
                         //if the answer is not the last one, add an or between them
@@ -80,7 +80,6 @@ module.exports = {
                         }
                     }
                     message.channel.send(`Incorrect, the answer was ||${answerString}||`)
-                    
                 }
             }
         })

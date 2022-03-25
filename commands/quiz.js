@@ -81,7 +81,7 @@ module.exports = {
                     message.channel.send(`Correct, your score is currently: **${score}/5**`)
                 } else {
                     let answerString = ""
-                    //puts the multile answers into one string
+                    //puts the multiple answers into one string
                     for (let index = 0; index < profileData[counter].questionEnglish.length; index++) {
                         answerString = answerString + profileData[counter].questionEnglish[index]
                         //if the answer is not the last one, add an or between them
