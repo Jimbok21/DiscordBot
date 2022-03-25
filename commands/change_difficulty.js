@@ -25,7 +25,16 @@ module.exports = {
                 try {
                     profileData = await questionsModel.findOne({ questionEnglish: messg.content })
                     gotQuestion = true
-                    message.channel.send(`The question is ${profileData.questionEnglish} = ${profileData.questionChinese}`)
+                    let answerString = ""
+                    //puts the multiple answers into one string
+                    for (let index = 0; index < profileData.questionEnglish.length; index++) {
+                        answerString = answerString + profileData.questionEnglish[index]
+                        //if the answer is not the last one, add an or between them
+                        if (index != profileData.questionEnglish.length - 1) {
+                            answerString = answerString + `**, ** `
+                        }
+                    }
+                    message.channel.send(`The question is **${answerString}** = **${profileData.questionChinese}** with difficulty: **${profileData.difficulty}**`)
                     message.channel.send(`What is the new difficulty of this question? Please type easy, medium or hard`)
                     return
                 } catch (err) {
@@ -36,9 +45,9 @@ module.exports = {
                 }
             } else if (gotQuestion == true) {
                 let newDifficulty = messg.content.toLowerCase()
-                console.log(newDifficulty)
                 if (newDifficulty == "easy" || newDifficulty == "medium" || newDifficulty == "hard") {
                     const update = await questionsModel.updateOne(
+                        //finds the question and updates the difficulty
                         {
                             questionEnglish: profileData.questionEnglish
                         },
@@ -46,7 +55,16 @@ module.exports = {
                             difficulty: newDifficulty
                         }
                     )
-                    message.channel.send(`updated: ${profileData.questionEnglish} = ${profileData.questionChinese} to difficulty: ${newDifficulty}`)
+                    let answerString = ""
+                    //puts the multiple answers into one string
+                    for (let index = 0; index < profileData.questionEnglish.length; index++) {
+                        answerString = answerString + profileData.questionEnglish[index]
+                        //if the answer is not the last one, add an or between them
+                        if (index != profileData.questionEnglish.length - 1) {
+                            answerString = answerString + `**, ** `
+                        }
+                    }
+                    message.channel.send(`updated: **${answerString}** = **${profileData.questionChinese}** to difficulty: **${newDifficulty}**`)
                 } else {
                     message.channel.send(`${messg.content} is not valid. Please restart and choose easy, medium or hard`)
                 }

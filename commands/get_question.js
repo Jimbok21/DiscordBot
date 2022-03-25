@@ -35,7 +35,7 @@ module.exports = {
                             answerString = answerString + ` or `
                         }
                     }
-                message.channel.send(`the English is: ${answerString} \nThe Chinese is ${profileData.questionChinese}`)
+                message.channel.send(`the English is: **${answerString}** \nThe Chinese is **${profileData.questionChinese}**`)
             })
             .catch((err) => {
                 //catches any errors like a timeout or if the question is not in the database

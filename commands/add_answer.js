@@ -3,7 +3,7 @@ const DiscordJS = require('discord.js')
 
 module.exports = {
     name: 'add_answer',
-    description: 'adds another english answer to a question e.g. 五 = 5 = five',
+    description: 'adds another english answer to a question e.g. 五 = 5 or five',
 
     async execute(message, args, client) {
 
@@ -26,27 +26,42 @@ module.exports = {
                 try {
                     profileData = await questionsModel.findOne({ questionEnglish: messg.content })
                     gotQuestion = true
-                    message.channel.send(`The question is ${profileData.questionEnglish} = ${profileData.questionChinese}`)
+                    let answerString = ""
+                    for (let index = 0; index < profileData.questionEnglish.length; index++) {
+                        answerString = answerString + profileData.questionEnglish[index]
+                        //if the answer is not the last one, add an or between them
+                        if (index != profileData.questionEnglish.length - 1) {
+                            answerString = answerString + `**, **`
+                        }
+                    }
+                    message.channel.send(`The question is **${answerString}** = **${profileData.questionChinese}**`)
                     message.channel.send(`What is an alternative english answer of that question`)
                     return
                 } catch (err) {
                     message.channel.send(`That question does not exist. Please type the command again`)
-                    gotQuestion = false
+                    collector.stop('invalid question')
                     console.log(err)
                     return
                 }
             } else if (gotQuestion == true) {
                 let additionalAnswer = messg.content.toLowerCase()
                 const update = await questionsModel.updateOne(
-                    {
-                        questionEnglish: profileData.questionEnglish
-                    }
+                    //finds the correct question and pushes the new answer to the list of answers
+                    { questionChinese: profileData.questionChinese },
+                    { $push: { questionEnglish: additionalAnswer } }
                 )
-                message.channel.send(`updated: ${profileData.questionEnglish} = ${profileData.questionChinese} to difficulty: ${newDifficulty}`)
+                let answerString = ""
+                for (let index = 0; index < profileData.questionEnglish.length; index++) {
+                    answerString = answerString + profileData.questionEnglish[index]
+                    //if the answer is not the last one, add an or between them
+                    if (index != profileData.questionEnglish.length - 1) {
+                        answerString = answerString + `**, **`
+                    }
+                }
+                message.channel.send(`updated: **${answerString}**, **${additionalAnswer}** = **${profileData.questionChinese}**`)
             } else {
-                message.channel.send(`${messg.content} is not valid. Please restart and choose easy, medium or hard`)
+                message.channel.send(`${messg.content} is not valid. Please restart and choose a different answer`)
             }
         })
     }
 }
-        
