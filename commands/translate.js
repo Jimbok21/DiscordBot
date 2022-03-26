@@ -20,16 +20,20 @@ module.exports = {
 
         if (args[0]) {
             english = args[0]
-            collector.stop("end")
+            translate(english, { from: 'en', to: 'zh-cn' }).then(res => {
+                message.channel.send(`**${english}** = **${res}**`)
+            }).catch(err => {
+                console.error(err)
+            })
+            collector.stop('end')
         } else {
             collector.on("collect", async (messg) => {
                 english = messg.content
-                collector.stop("end")
+                collector.stop('end')
             })
         }
 
         collector.on("end", (msg) => {
-            console.log(english)
             translate(english, { from: 'en', to: 'zh-cn' }).then(res => {
                 message.channel.send(`**${english}** = **${res}**`)
             }).catch(err => {
