@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const mongoose = require('./database/mongoose');
+const mongoose = require('/app/src/database/mongoose');
 const { Client, Intents } = require('discord.js');
 
 const client = new Client({
@@ -9,7 +9,7 @@ const client = new Client({
 
     
 const fs = require('fs');
-const message = require('./events/message');
+const message = require('/app/src/events/message');
 require('dotenv').config();
 
 
@@ -20,18 +20,18 @@ client.prefix = process.env.PREFIX;
 client.commands = new Discord.Collection();
 
 //gets the filenames of the events and commands
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+const commandFiles = fs.readdirSync('/app/src/commands').filter(file => file.endsWith('.js'));
+const eventFiles = fs.readdirSync('/app/src/events').filter(file => file.endsWith('.js'));
 
 //command handler. Allows me to externalise commands
 for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
+    const command = require(`/app/src/commands/${file}`);
     client.commands.set(command.name, command);
 }
 
 //event handler. Allows me to externalise events
 for (const file of eventFiles) {
-    const event = require(`./events/${file}`);
+    const event = require(`/app/src/events/${file}`);
     if (event.once) {
         client.once(event.name, (...args) => event.execute(...args, client));
     } else {

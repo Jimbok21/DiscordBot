@@ -1,8 +1,10 @@
-const questionsModel = require('../../Discord_bot_code/models/questionsSchema')
+const questionsModel = require('/app/src/models/questionsSchema')
 const DiscordJS = require('discord.js')
 module.exports = {
-    name: 'quiz',
-    description: `The user answers 5 questions in 30 seconds`,
+    name: 'timed_quiz',
+    description: `The user must answer as many questions as possible in the time they provide. They can choose the difficulty of the questions.` 
+    + ` If no time is specified, 30s is the default`,
+    inputs: `<time in seconds>`,
     async execute(message, args, client) {
 
         //initialize variables 
@@ -10,24 +12,28 @@ module.exports = {
         let selected = false
         let counter = 0
         let score = 0
+        let time
 
-        //checks the message is from the user and ignores other messages
-        let filter = (m) => m.author.id === message.author.id
+        //sets the quiz time to 30s or to the amount inputted
+        if(args[0] == null) {
+            time = 30
+        } else {
+            time = args[0]
+        }
 
         //Send intro messages
-        message.channel.send(`you have 30 seconds to answer 5 questions`)
+        message.channel.send(`you have ${time} seconds to answer as many questions as you can`)
         message.channel.send(`What difficulty would you like? \nplease type: easy, medium, hard or random`)
 
-        //sets the message collector to 30s and collect 6 messages
-        //the first message is selecting the difficulty, the other 5 are the answers
+        //sets the message collector to the time inputted
         const collector = new DiscordJS.MessageCollector(message.channel, {
-            filter,
-            time: 30 * 1000,
-            max: 6,
+            time: time * 1000,
         })
 
         //when a message is collected
         collector.on("collect", async (messg) => {
+            //checks to make sure the ID is from the person playing the game
+            if (messg.author.id != message.author.id) return;
             //if its the first run then checks the selected difficulty
             if (selected === false) {
                 difficultySelected = messg.content.toLowerCase()
@@ -37,7 +43,7 @@ module.exports = {
                         profileData = await questionsModel.find()
                         shuffle(profileData)
                         selected = true
-                        message.channel.send(`What is: ${profileData[counter].questionChinese} `)
+                        message.channel.send(`What is ${profileData[counter].questionChinese}`)
                         return
                     } catch (err) {
                         console.log(err)
@@ -49,7 +55,7 @@ module.exports = {
                         profileData = await questionsModel.find({ difficulty: difficultySelected })
                         shuffle(profileData)
                         selected = true
-                        message.channel.send(`What is: ${profileData[counter].questionChinese}`)
+                        message.channel.send(`What is ${profileData[counter].questionChinese}`)
                         return
                     } catch (err) {
                         console.log(err)
@@ -70,15 +76,16 @@ module.exports = {
                     }
                     return
                 }
-            } else if (selected === true) {
-                let messageContent = [] 
-                messageContent[counter] = messg.content.toLowerCase()
+            }
 
+            if (selected === true) {
+                let answers = []
+                answers[counter] = messg.content.toLowerCase()
 
                 //checks if the answer is correct and adds it to the score
-                if (profileData[counter].questionEnglish.includes(messageContent[counter])) {
+                if(profileData[counter].questionEnglish.includes(answers[counter])) {
                     score++
-                    message.channel.send(`Correct, your score is currently: **${score}/5**`)
+                    message.channel.send(`Correct, your score is currently: **${score}**`)
                 } else {
                     let answerString = ""
                     //puts the multiple answers into one string
@@ -89,23 +96,19 @@ module.exports = {
                             answerString = answerString + `**, **`
                         }
                     }
-                    message.channel.send(`Incorrect, the answer was ||**${answerString}**|| \nyour score is currently: ${score}/5`)
+                    message.channel.send(`Incorrect, the answer was ||**${answerString}**|| \nyour score is currently: ${score}`)
                 }
 
                 //sends the next question
-                try {
-                    //will only send 5 questions
-                    if (counter < 4) {
-                        message.channel.send(`What is ${profileData[counter + 1].questionChinese}`)
-                    }
-                } catch (err) {
-                    //if it cannot send the next question, it is because there are not enough questions in the database
+                try{
+                message.channel.send(`What is ${profileData[counter + 1].questionChinese}`)
+                } catch(err) {
                     message.channel.send(`All out of questions`)
                     collector.stop('out of questions')
                 }
                 //increments the counter
                 counter++
-
+                
             }
         })
 
@@ -115,7 +118,7 @@ module.exports = {
                 if (profileData[counter] == null) {
                     message.channel.send('There are no questions of that difficulty in the database')
                 } else {
-                    message.channel.send(`**Well done! Your final score was ${score}/5**`)
+                    message.channel.send(`**Well done! Your final score was ${score}**`)
                 }
             } else {
                 //no difficulty was selected
@@ -142,4 +145,4 @@ module.exports = {
             return array;
         }
     },
-}
+};

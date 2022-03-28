@@ -1,7 +1,7 @@
 const fs = require("fs");
 const Discord = require('discord.js');
 const { MessageEmbed } = require("discord.js");
-const dir = 'E:/Users/Jimmy/OneDrive - Swansea University/YEAR 3/CS-354 Project Dissertation/Discord_bot_code/commands/';
+const dir = '/app/src/commands/';
 
 module.exports = {
     name: 'help',

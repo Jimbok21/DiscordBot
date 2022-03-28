@@ -1,4 +1,4 @@
-const questionsModel = require('../../Discord_bot_code/models/questionsSchema')
+const questionsModel = require('/app/src/models/questionsSchema')
 const DiscordJS = require('discord.js')
 
 module.exports = {
