@@ -3,7 +3,7 @@ const DiscordJS = require('discord.js')
 
 module.exports = {
     name: 'translate',
-    description: 'will translate an english word to chinese using google translate',
+    description: 'will translate an english word to chinese using google translate. Works best when translating words, not sentences',
     inputs: '<english>',
     async execute(message, args, client) {
 
