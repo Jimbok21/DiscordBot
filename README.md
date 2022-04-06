@@ -1,2 +1,2 @@
 # DiscordBot
-When deploying to the cloud, tell it to run 'npm install' and then 'npm start'
+A Discord Chinese Revision Bot Hosted on A Blockchain Based Cloud Computing Infrastructure
