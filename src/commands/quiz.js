@@ -106,6 +106,9 @@ module.exports = {
                 //increments the counter
                 counter++
 
+                if(messageContent[counter] == 'quit') {
+                    collector.stop('user quit')
+                }
             }
         })
 
